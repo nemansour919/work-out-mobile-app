@@ -20,6 +20,8 @@ class UserProfileOptionsController extends GetxController {
   TextEditingController newUserNameController = TextEditingController();
   TextEditingController newEmailController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
   late List userProfileOptionsList = [
     {
       "optionTitle": "change username",
@@ -125,6 +127,15 @@ class UserProfileOptionsController extends GetxController {
                       label: capitalize("new email"),
                       controller: newEmailController,
                       keyboardType: TextInputType.text),
+
+             // Current password input
+            CustomTextField(
+              label: capitalize("current password"),
+              controller: passwordController,
+              keyboardType: TextInputType.text,
+              obscureText: true, // hide password
+            ),
+
                   SizedBox(
                     height: 50,
                     child: CustomButton(
@@ -134,7 +145,7 @@ class UserProfileOptionsController extends GetxController {
                           Get.back();
 
                           await userInformationController
-                              .updateEmail(newEmailController.text.trim());
+                              .updateEmail(newEmailController.text.trim(), passwordController.text.trim());
                         }),
                   )
                 ],

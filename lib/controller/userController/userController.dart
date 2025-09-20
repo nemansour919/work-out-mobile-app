@@ -205,13 +205,28 @@ class UserInformationController extends GetxController {
   }
 
   // Update login email with FirebaseAuth
-  updateEmail(String newEmail) async {
+  updateEmail(String newEmail,String enteredPassword ) async {
     // Show loading
     dialogsAndLoadingController.showLoading();
 
     try {
-      // Update email in firebase auth
-      await _auth.currentUser!.updateEmail(newEmail);
+
+User? user = _auth.currentUser;
+if(user!=null){
+  try {
+    final cred = EmailAuthProvider.credential(
+      email: user.email!,
+      password: enteredPassword, // get from user input
+    );
+    await user.reauthenticateWithCredential(cred);
+    await user.verifyBeforeUpdateEmail(newEmail);
+    print("Email updated successfully");
+  } catch (e) {
+    print("Failed to update email: $e");
+  }
+}
+
+
 
       // updating data in firestore
       // ! after next opening of the app it'll demand to verify new email
